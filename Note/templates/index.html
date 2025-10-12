@@ -1,6 +1,13 @@
-$def with (name)
+$def with (notes)
+<ul>
+$for note in notes:
+    <p id="t$note.id">Title: $note.title</p>
+    <p id="t$note.id">Body: $note.body</p>
+    <p>------</p>
+</ul>
 
-$if name:
-    I just wanted to say <em>hello</em> to $name.
-$else:
-    <em>Hello</em>, world!
+<form method="post" action="add">
+    <p><input type="text" name="title" />
+        <input type="text" name="body" />
+        <input type="submit" value="Add" /></p>
+</form>
