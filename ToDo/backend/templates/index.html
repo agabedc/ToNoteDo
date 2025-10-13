@@ -12,8 +12,43 @@ $def with ()
     <div class="container">
         <h1>Todo List</h1>
         <div class="todo-box">
-            <button class="add-btn">Add</button>
+            <div id="app">
+                <div class="input-area">
+                    <input type="text" class="simple-input" v-model="inputText" :placeholder="placeholder" />
+                    <button class="add-btn" @click="addTask">Add</button>
+                </div>
+
+                <div class="tasks" v-if="tasks.length">
+                    <div class="task-item" v-for="(t, idx) in tasks" :key="idx">
+                        <input type="checkbox" class="task-checkbox" :id="'tsk-'+idx">
+                        <label class="task-label" :for="'tsk-'+idx">{{ t }}</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Vue 3 via CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script>
+        const { createApp, ref } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    inputText: '',
+                    placeholder: 'add your task!',
+                    tasks: []
+                }
+            },
+            methods: {
+                addTask() {
+                    const text = (this.inputText || '').trim();
+                    if (!text) return;
+                    this.tasks.push(text);
+                    this.inputText = '';
+                }
+            }
+        }).mount('#app');
+    </script>
 </body>
 </html>

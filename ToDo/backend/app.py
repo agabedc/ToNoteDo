@@ -14,5 +14,7 @@ class Index:
         return render.index()  # render index.html
 
 if __name__ == "__main__":
+    for i in range(10):
+        print(i)
     app = web.application(urls, globals())
-    app.run()
+    web.httpserver.runsimple(app.wsgifunc(), ("127.0.0.1", 8080))
