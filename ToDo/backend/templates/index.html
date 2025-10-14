@@ -1,4 +1,4 @@
-$def with ()
+$def with (tasks)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +12,17 @@ $def with ()
     <div class="container">
         <h1>Todo List</h1>
         <div class="todo-box">
-            <button class="add-btn">Add</button>
+            <form method="POST" action="/add" class="input-area">
+                <input type="text" name="task" class="task-input" placeholder="Add your task...">
+                <button class="add-btn" type="submit">Add</button>
+            </form>
+            <div class="tasks">
+                $for task in tasks:
+                    <div class="task-item">
+                        <input type="checkbox">
+                        <span>$task</span>
+                    </div>
+            </div>
         </div>
     </div>
 </body>
