@@ -7,7 +7,8 @@ load_dotenv()
 urls = (
     '/', 'index',
     '/add', 'add',
-    '/edit', 'edit'
+    '/edit', 'edit',
+    '/delete/(\d+)', 'delete'
 )
 
 db = web.database(
@@ -45,6 +46,11 @@ class edit:
                   body=body_)
 
         raise web.seeother('/')
-
+    
+class delete:
+    def DELETE(self, id):
+        db.delete('notes', where=f"id={id}")
+        raise web.seeother('/')
+    
 if __name__ == "__main__":
     app.run()
