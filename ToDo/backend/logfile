@@ -1,0 +1,25 @@
+2025-10-13 17:18:54.697 EDT [97712] LOG:  starting PostgreSQL 16.10 (Homebrew) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.202), 64-bit
+2025-10-13 17:18:54.699 EDT [97712] LOG:  could not bind IPv6 address "::1": Address already in use
+2025-10-13 17:18:54.699 EDT [97712] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-10-13 17:18:54.699 EDT [97712] LOG:  could not bind IPv4 address "127.0.0.1": Address already in use
+2025-10-13 17:18:54.699 EDT [97712] HINT:  Is another postmaster already running on port 5432? If not, wait a few seconds and retry.
+2025-10-13 17:18:54.699 EDT [97712] WARNING:  could not create listen socket for "localhost"
+2025-10-13 17:18:54.699 EDT [97712] FATAL:  could not create any TCP/IP sockets
+2025-10-13 17:18:54.699 EDT [97712] LOG:  database system is shut down
+2025-10-13 17:21:13.863 EDT [98607] LOG:  starting PostgreSQL 16.10 (Homebrew) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.202), 64-bit
+2025-10-13 17:21:13.864 EDT [98607] LOG:  listening on IPv6 address "::1", port 5432
+2025-10-13 17:21:13.864 EDT [98607] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-13 17:21:13.865 EDT [98607] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-10-13 17:21:13.866 EDT [98610] LOG:  database system was shut down at 2025-10-13 17:18:29 EDT
+2025-10-13 17:21:13.870 EDT [98607] LOG:  database system is ready to accept connections
+2025-10-13 17:21:15.776 EDT [98674] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:21.112 EDT [98681] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:26.434 EDT [98683] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:30.781 EDT [98718] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:31.768 EDT [98781] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:37.077 EDT [98785] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:42.348 EDT [98787] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:47.665 EDT [98791] FATAL:  role "postgres" does not exist
+2025-10-13 17:21:47.708 EDT [98793] FATAL:  role "postgres" does not exist
+2025-10-13 17:37:26.517 EDT [98608] LOG:  checkpoint starting: time
+2025-10-13 17:39:06.108 EDT [98608] LOG:  checkpoint complete: wrote 986 buffers (6.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=99.582 s, sync=0.006 s, total=99.591 s; sync files=317, longest=0.001 s, average=0.001 s; distance=4605 kB, estimate=4605 kB; lsn=0/198FA78, redo lsn=0/198FA40
