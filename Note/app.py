@@ -34,7 +34,7 @@ class add:
         raise web.seeother('/')
         
 class edit:
-    def POST(self):
+    def PUT(self):
         data = web.input()
         id_, title_, body_ = data.id, data.title, data.body
 
