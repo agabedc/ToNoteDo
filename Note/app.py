@@ -7,7 +7,7 @@ load_dotenv()
 urls = (
     '/', 'index',
     '/add', 'add',
-    r'/edit/(\d+)/([^/]+)/([^/]+)', 'edit'  # note_id / title / body
+    '/edit', 'edit'
 )
 
 db = web.database(
@@ -34,12 +34,16 @@ class add:
         raise web.seeother('/')
         
 class edit:
-    def GET(self, note_id, new_title, new_body):
+    def POST(self):
+        data = web.input()
+        id_, title_, body_ = data.id, data.title, data.body
+
         db.update('notes',
                   where='id=$id',
-                  vars={'id': note_id},
-                  title=new_title,
-                  body=new_body)
+                  vars={'id': id_},
+                  title=title_,
+                  body=body_)
+
         raise web.seeother('/')
 
 if __name__ == "__main__":
