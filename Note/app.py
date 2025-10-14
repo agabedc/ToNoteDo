@@ -2,7 +2,7 @@ import web
 import os
 from dotenv import load_dotenv
 
-load_dotenv("env.env")
+load_dotenv()
 
 urls = (
     '/', 'index',
