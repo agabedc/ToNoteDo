@@ -14,15 +14,19 @@ $def with (tasks)
         <div class="todo-box">
             <form method="POST" action="/add" class="input-area">
                 <input type="text" name="task" class="task-input" placeholder="Add your task...">
-                <button class="add-btn" type="submit">Add</button>
+                <button class="add-btn btn" type="submit">Add</button>
             </form>
             <div class="tasks">
                 $for task in tasks:
                     <div class="task-item">
-                        <input type="checkbox">
                         <span>$task</span>
-                    </div>
-            </div>
+                        <div>
+                            <button class="edit-btn btn" type="submit">Edit</button>
+                            <button class="delete-btn btn" type="submit">Delete</button>
+                        </div>
+                        
+                    </div> 
+            </div> 
         </div>
     </div>
 </body>

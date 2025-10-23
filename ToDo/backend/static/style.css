@@ -17,7 +17,7 @@ h1 {
 }
 
 .todo-box {
-    width: 300px;
+    width: 600px;
     min-height: 250px;
     background-color: white;
     border: 2px solid #ccc;
@@ -57,7 +57,7 @@ h1 {
 }
 
 
-.add-btn {
+.btn {
     padding: 10px 20px;
     font-size: 16px;
     border: none;
@@ -68,6 +68,28 @@ h1 {
     transition: background-color 0.3s;
 }
 
-.add-btn:hover {
+.btn:hover {
     background-color: #0056b3;
+}
+
+.add-btn {
+    background-color: #77B254;
+}
+
+.add-btn:hover {
+    background-color: #5B913B;
+}
+
+.delete-btn {
+    background-color: #E64848;
+}
+
+.delete-btn:hover {
+    background-color: #C21010;
+}
+
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
 }
