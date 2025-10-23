@@ -1,13 +1,46 @@
 $def with (notes)
-<ul>
-$for note in notes:
-    <p id="t$note.id">Title: $note.title</p>
-    <p id="t$note.id">Body: $note.body</p>
-    <p>------</p>
-</ul>
+$var css: static/style.css
+$var js: static/main.js
 
-<form method="post" action="add">
-    <p><input type="text" name="title" />
-        <input type="text" name="body" />
-        <input type="submit" value="Add" /></p>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Notes</title>
+    $if self.css:
+        $for style in self.css.split()
+            <link rel="stylesheet" href="$style" />
+    $if self.js:
+        $for js in self.js.split()
+            <script src="$js"></script>
+  </head>
+  <body class="container">
+    <h1>Notes</h1>
+    $if notes:
+        $for note in notes:
+            <div class="note">
+                <h3 class="note-title">$note.title</h3>
+                <span class="datetime">$note.edited</span>
+                <div class="actions">
+                    <form action="https://google.com">
+                        <input type="submit" value="Edit" />
+                    </form>
+                    <form action="https://google.com">
+                        <input type="submit" value="Delete" />
+                    </form>
+                </div>
+            </div>
+    $else:
+        <p>No notes available.</p>
+
+    <!-- <form method="post" action="add">
+        <p>
+            <input type="text" name="title" />
+            <input type="text" name="body" />
+            <input type="submit" value="Add" />
+        </p>
+    </form> -->
+  </body>
+</html>
