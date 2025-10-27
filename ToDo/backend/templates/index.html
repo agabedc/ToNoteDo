@@ -1,33 +1,63 @@
 $def with (tasks)
+$code:
+    def fmt(ts):
+        return ts.strftime('%Y-%m-%d %H:%M') if ts else ''
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo List</title>
-    <link rel="stylesheet" href="/static/style.css">
-    
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:20px; display:flex; justify-content:center; align-items:flex-start; }
+    .container { background:#fff; border-radius:10px; padding:20px 30px; box-shadow:0 2px 8px rgba(0,0,0,0.1); width:500px; }
+    h1 { text-align:center; color:#333; }
+    form { display:flex; gap:8px; margin-bottom:20px; }
+    input[type="text"] { flex:1; padding:8px; font-size:14px; border:1px solid #ccc; border-radius:5px; }
+    button { border:none; padding:8px 12px; border-radius:5px; cursor:pointer; }
+    .btn-success { background:#4CAF50; color:#fff; }
+    .btn-primary { background:#007BFF; color:#fff; }
+    .btn-danger  { background:#E74C3C; color:#fff; }
+    ul.task-list { list-style:none; padding:0; margin:0; }
+    li { display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; border-radius:6px; padding:10px; margin-bottom:10px; border-left:5px solid #007BFF; }
+    .task-title { flex:1; color:#333; font-weight:500; }
+    .completed { text-decoration:line-through; color:#888; }
+    small { display:block; color:#777; font-size:12px; margin-top:3px; }
+    .actions { display:flex; gap:5px; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Todo List</h1>
-        <div class="todo-box">
-            <form method="POST" action="/add" class="input-area">
-                <input type="text" name="task" class="task-input" placeholder="Add your task...">
-                <button class="add-btn btn" type="submit">Add</button>
-            </form>
-            <div class="tasks">
-                $for task in tasks:
-                    <div class="task-item">
-                        <span>$task</span>
-                        <div>
-                            <button class="edit-btn btn" type="submit">Edit</button>
-                            <button class="delete-btn btn" type="submit">Delete</button>
-                        </div>
-                        
-                    </div> 
-            </div> 
-        </div>
-    </div>
+  <div class="container">
+    <h1>Todo List</h1>
+
+    <form action="/add" method="POST">
+      <input type="text" name="title" placeholder="Add your task..." required>
+      <button type="submit" class="btn-success">Add</button>
+    </form>
+
+    <ul class="task-list">
+      $if tasks:
+        $for task in tasks:
+          $code:
+              cls = 'task-title completed' if task.completed else 'task-title'
+          <li>
+            <div>
+              <span class="$:cls">$task.title</span>
+              <small>Created: $:fmt(task.created_at)</small>
+            </div>
+            <div class="actions">
+              <form action="/toggle/$task.id" method="POST" style="display:inline;">
+                <button type="submit" class="btn-primary">$:('Undo' if task.completed else 'Done')</button>
+              </form>
+              <form action="/delete/$task.id" method="POST" style="display:inline;">
+                <button type="submit" class="btn-danger">Delete</button>
+              </form>
+            </div>
+          </li>
+      $else:
+        <li>No tasks yet.</li>
+    </ul>
+  </div>
 </body>
 </html>

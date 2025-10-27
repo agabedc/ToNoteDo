@@ -1,30 +1,49 @@
+import os
 import web
+from db import db
 
 urls = (
-    '/', 'Index', '/add', 'add'
+    '/', 'Index',
+    '/add', 'Add',
+    '/toggle/(\\d+)', 'Toggle',
+    '/delete/(\\d+)', 'Delete'
 )
 
+app = web.application(urls, globals())
 
 # Render HTML templates from the 'templates' folder
-render = web.template.render('templates/')
-
-# In-memory store for tasks
-tasks = []
-
+render = web.template.render(
+    os.path.join(os.path.dirname(__file__), 'templates'),
+    cache=False
+)
 # The main class for the homepage
 class Index:
     def GET(self):
-        return render.index(tasks=tasks)  # render index.html with tasks
+        tasks = list(db.query("SELECT id, title, completed, created_at FROM public.tasks ORDER BY id DESC"))
+        return render.index(tasks)
     
-class add:
+class Add:
     def POST(self):
-        i = web.input(task="")
-        #add item to the list
-        if i.task:
-            tasks.append(i.task)
+        i = web.input(title="")
+        title = i.title.strip()
+        if title:
+            db.insert('tasks', title=title)
         raise web.seeother('/')
         
+class Toggle:
+    def POST(self, id):
+        db.query("""
+            UPDATE public.tasks
+            SET completed = NOT completed
+            WHERE id = $id
+        """, vars={'id': int(id)})
+        raise web.seeother('/')
 
+class Delete:
+    def POST(self, id):
+        db.delete('tasks', where='id=$id', vars={'id': int(id)})
+        raise web.seeother('/')
+        
 if __name__ == "__main__":
     app = web.application(urls, globals())
     app.run()

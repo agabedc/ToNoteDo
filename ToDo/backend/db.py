@@ -1,15 +1,12 @@
-import os
-import web
+import web, os
 from dotenv import load_dotenv
+load_dotenv()
 
-load_dotenv(override=False)
-
-def get_db():
-    return web.database(
-        dbn='postgres',
-        db=os.getenv('PGDATABASE', 'slowapi'),
-        user=os.getenv('PGUSER', 'postgres'),
-        pw=os.getenv('PGPASSWORD', ''),
-        host=os.getenv('PGHOST', 'localhost'),
-        port=int(os.getenv('PGPORT', '5432')),
-    )
+db = web.database(
+    dbn='postgres',
+    host=os.getenv('DB_HOST', '127.0.0.1'),
+    port=int(os.getenv('DB_PORT', 5432)),
+    user=os.getenv('DB_USER'),
+    pw=os.getenv('DB_PASSWORD'),
+    db=os.getenv('DB_NAME'),
+)
