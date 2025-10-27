@@ -1,11 +1,13 @@
 import os
 import web
 from db import db
+import json
 
 urls = (
     '/', 'Index',
     '/add', 'Add',
     '/toggle/(\\d+)', 'Toggle',
+    '/edit/(\\d+)', 'Edit',
     '/delete/(\\d+)', 'Delete'
 )
 
@@ -37,6 +39,16 @@ class Toggle:
             SET completed = NOT completed
             WHERE id = $id
         """, vars={'id': int(id)})
+        raise web.seeother('/')
+
+class Edit:
+    def POST(self, id):
+        data = web.input(title="")
+        title = data.title.strip()
+        if title:
+            db.update('tasks', where='id=$id', vars={'id': int(id)}, title=title)
+            if web.ctx.env.get('HTTP_X_REQUESTED_WITH'):  # If AJAX
+                return json.dumps({'status': 'ok', 'id': int(id), 'title': title})
         raise web.seeother('/')
 
 class Delete:
