@@ -41,7 +41,7 @@ $code:
         $for task in tasks:
           $code:
               cls = 'task-title completed' if task.completed else 'task-title'
-          <li>
+          <li data-id="$task.id">
             <div>
               <span class="$:cls">$task.title</span>
               <small>Created: $:fmt(task.created_at)</small>
@@ -49,6 +49,10 @@ $code:
             <div class="actions">
               <form action="/toggle/$task.id" method="POST" style="display:inline;">
                 <button type="submit" class="btn-primary">$:('Undo' if task.completed else 'Done')</button>
+              </form>
+              <form action="/edit/$task.id" method="POST" style="display:inline;">
+                <input type="text" name="title" value="$task.title" style="padding:6px; font-size:14px; margin-right:6px;">
+                <button type="submit" class="btn-primary">Edit</button>
               </form>
               <form action="/delete/$task.id" method="POST" style="display:inline;">
                 <button type="submit" class="btn-danger">Delete</button>
