@@ -41,7 +41,7 @@ psql -U postgres -d postgres -a -f schema.sql
 Start the web application by running the `app.py` file:
 
 ```bash
-python app.py
+python3 app.py
 ```
 
 The application will be running at `http://localhost:8080`.

@@ -51,7 +51,7 @@ class edit:
         raise web.seeother('/')
     
 class delete:
-    def DELETE(self, id):
+    def POST(self, id):
         db.delete('notes', where=f"id={id}")
         raise web.seeother('/')
     
