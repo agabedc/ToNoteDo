@@ -4,7 +4,7 @@ $var js: static/main.js
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -15,32 +15,32 @@ $var js: static/main.js
     $if self.js:
         $for js in self.js.split()
             <script src="$js"></script>
-  </head>
-  <body class="container">
-    <h1>Notes</h1>
-    $if notes:
-        $for note in notes:
-            <div class="note">
-                <h3 class="note-title">$note.title</h3>
-                <span class="datetime">$note.edited</span>
-                <div class="actions">
-                    <form action="https://google.com">
-                        <input type="submit" value="Edit" />
-                    </form>
-                    <form action="https://google.com">
-                        <input type="submit" value="Delete" />
-                    </form>
-                </div>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Notes</h1>
+            <!-- Notes List Card -->
+            <div class="note-list">
+                $if notes:
+                    $for note in notes:
+                        <div class="note">
+                            <div>
+                                <h3 class="note-title">$note.title</h3>
+                                <span class="datetime">$note.edited</span>
+                            </div>
+                            <div class="actions">
+                                <form method="get" action="/edit/$note.id">
+                                    <button type="submit" class="btn btn-secondary">Edit</button>
+                                </form>
+                                <form method="post" action="/delete/$note.id">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                $else:
+                    <p>No notes available.</p>
             </div>
-    $else:
-        <p>No notes available.</p>
-
-    <!-- <form method="post" action="add">
-        <p>
-            <input type="text" name="title" />
-            <input type="text" name="body" />
-            <input type="submit" value="Add" />
-        </p>
-    </form> -->
-  </body>
+            <a href="/add" class="btn btn-primary back-link" style="margin-top:2rem;">Add a New Note</a>
+        </div>
+    </body>
 </html>

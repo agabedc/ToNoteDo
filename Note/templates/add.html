@@ -1,0 +1,51 @@
+$var css: static/style.css
+$var js: static/main.js
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Note</title>
+    $if self.css:
+        $for style in self.css.split()
+            <link rel="stylesheet" href="$style" />
+    $if self.js:
+        $for js in self.js.split()
+            <script src="$js"></script>
+    </head>
+    <body class="container">
+        <div class="form-wrapper">
+            <div class="form-card">
+                <h1 class="form-title">Add a Note</h1>
+                <form method="post" action="/add" autocomplete="off">
+                    <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="form-control"
+                        placeholder="Enter a title"
+                        required
+                        autofocus
+                    />
+                    </div>
+                    <div class="mb-3">
+                    <label for="body" class="form-label">Body</label>
+                    <textarea
+                        id="body"
+                        name="body"
+                        class="form-control"
+                        rows="5"
+                        placeholder="Write your note..."
+                        required
+                    ></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Add Note</button>
+                </form>
+                <a href="/" class="text-muted back-link">&larr; Back to Notes</a>
+            </div>
+        </div>
+    </body>
+</html>
