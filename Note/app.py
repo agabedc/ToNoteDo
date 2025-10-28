@@ -29,6 +29,9 @@ class index:
         return render.index(notes)
 
 class add:
+    def GET(self):
+        return render.add()
+    
     def POST(self):
         i = web.input()
         n = db.insert('notes', title=i.title, body=i.body)
