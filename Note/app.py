@@ -52,6 +52,7 @@ class edit:
                   title=data.title,
                   body=data.body)
         raise web.seeother('/')
+
 class delete:
     def POST(self, id):
         db.delete('notes', where=f"id={id}")

@@ -1,5 +1,5 @@
-$var css: static/style.css
-$var js: static/main.js
+$var css: /static/style.css
+$var js: /static/main.js
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,10 +8,10 @@ $var js: static/main.js
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Note</title>
     $if self.css:
-        $for style in self.css.split()
+        $for style in self.css.split():
             <link rel="stylesheet" href="$style" />
     $if self.js:
-        $for js in self.js.split()
+        $for js in self.js.split():
             <script src="$js"></script>
     </head>
     <body class="container">
