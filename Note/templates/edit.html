@@ -1,0 +1,30 @@
+$def with (note)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Note</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body class="container">
+  <div class="form-wrapper">
+    <div class="form-card">
+      <h1 class="form-title">Edit Note</h1>
+      <form method="post" action="/edit/$note.id" autocomplete="off">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" id="title" name="title" class="form-control" value="$note.title" required autofocus />
+        </div>
+        <div class="mb-3">
+          <label for="body" class="form-label">Body</label>
+          <textarea id="body" name="body" class="form-control" rows="5" required>$note.body</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+      </form>
+      <a href="/" class="text-muted back-link">&larr; Back to Notes</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,7 +7,7 @@ load_dotenv()
 urls = (
     '/', 'index',
     '/add', 'add',
-    '/edit', 'edit',
+    '/edit/(\d+)', 'edit',
     '/delete/(\d+)', 'delete'
 )
 
@@ -38,18 +38,20 @@ class add:
         raise web.seeother('/')
         
 class edit:
-    def PUT(self):
-        data = web.input()
-        id_, title_, body_ = data.id, data.title, data.body
+    def GET(self, id):
+        note = db.select('notes', where='id=$id', vars={'id': id})
+        if note:
+            return render.edit(note[0]) 
+        return "Note not found", 404
 
+    def POST(self, id):
+        data = web.input()
         db.update('notes',
                   where='id=$id',
-                  vars={'id': id_},
-                  title=title_,
-                  body=body_)
-
+                  vars={'id': id},
+                  title=data.title,
+                  body=data.body)
         raise web.seeother('/')
-    
 class delete:
     def POST(self, id):
         db.delete('notes', where=f"id={id}")
