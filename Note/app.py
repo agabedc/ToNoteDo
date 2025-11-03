@@ -26,6 +26,14 @@ db = web.database(
 app = web.application(urls, globals())
 render = web.template.render('templates/')
 
+def validate_note(data):
+    errors = {}
+    if not data.get('title', '').strip():
+        errors['title'] = "Title is required"
+    if not data.get('body', '').strip():
+        errors['body'] = "Body is required"
+    return errors
+
 class index:
     def GET(self):
         notes = db.select('notes')
@@ -33,10 +41,13 @@ class index:
 
 class add:
     def GET(self):
-        return render.add()
+        return render.add(errors={}, title='', body='')
     
     def POST(self):
-        i = web.input()
+        i = web.input(title='', body='')
+        errors = validate_note(i)
+        if errors:
+            return render.add(errors=errors, title=i.title, body=i.body)
         n = db.insert('notes', title=i.title, body=i.body)
         raise web.seeother('/')
         
@@ -44,11 +55,20 @@ class edit:
     def GET(self, id):
         note = db.select('notes', where='id=$id', vars={'id': id})
         if note:
-            return render.edit(note[0]) 
-        return "Note not found", 404
+            return render.edit(note[0], errors={}) 
+        raise web.seeother('/?message=Note%20not%20found')
 
     def POST(self, id):
-        data = web.input()
+        note_query = db.select('notes', where='id=$id', vars={'id': id})
+        if not note_query:
+            raise web.seeother('/?message=Note%20not%20found')
+        data = web.input(title='', body='')
+        errors = validate_note(data)
+        if errors:
+            note = note_query[0]
+            note.title = data.title
+            note.body = data.body
+            return render.edit(note=note, errors=errors)
         db.update('notes',
                   where='id=$id',
                   vars={'id': id},
@@ -58,6 +78,9 @@ class edit:
 
 class delete:
     def POST(self, id):
+        note = db.select('notes', where='id=$id', vars={'id': id})
+        if not note:
+            raise web.seeother('/?message=Note%20not%20found')
         db.delete('notes', where=f"id={id}")
         raise web.seeother('/')
     

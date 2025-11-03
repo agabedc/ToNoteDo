@@ -258,6 +258,13 @@ a:focus {
   margin-bottom: 0.3rem;
 }
 
+.text-danger {
+  color: #dc3545; 
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+}
+
 /* ---------------------------------------------------------
    Responsive Design
    --------------------------------------------------------- */

@@ -1,4 +1,4 @@
-$def with (note)
+$def with (note, errors)
 $var css: /static/style.css
 $var js: /static/main.js
 
@@ -32,6 +32,8 @@ $var js: /static/main.js
                         required
                         autofocus
                     />
+                    $if 'title' in errors:
+                        <div class="text-danger">$errors['title']</div>
                     </div>
                     <div class="mb-3">
                     <label for="body" class="form-label">Body</label>
@@ -43,6 +45,8 @@ $var js: /static/main.js
                         placeholder="Write your note..."
                         required
                     >$note.body</textarea>
+                    $if 'body' in errors:
+                        <div class="text-danger">$errors['body']</div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Save Note</button>
                 </form>
