@@ -1,6 +1,7 @@
 import web
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -8,7 +9,9 @@ urls = (
     '/', 'index',
     '/add', 'add',
     '/edit/(\d+)', 'edit',
-    '/delete/(\d+)', 'delete'
+    '/delete/(\d+)', 'delete',
+    '/stats', 'stats_page',
+    '/api/stats', 'stats_api'
 )
 
 db = web.database(
@@ -57,6 +60,26 @@ class delete:
     def POST(self, id):
         db.delete('notes', where=f"id={id}")
         raise web.seeother('/')
+    
+class stats_page:
+    def GET(self):
+        return render.stats() 
+
+class stats_api:
+    def GET(self):
+        today = db.query("SELECT COUNT(*) AS c FROM notes WHERE created::date = CURRENT_DATE")[0].c
+        week = db.query("SELECT COUNT(*) AS c FROM notes WHERE created >= date_trunc('week', CURRENT_DATE)")[0].c
+        month = db.query("SELECT COUNT(*) AS c FROM notes WHERE created >= date_trunc('month', CURRENT_DATE)")[0].c
+        all_notes = db.query("SELECT COUNT(*) AS c FROM notes")[0].c
+
+        web.header('Content-Type', 'application/json')
+        
+        return json.dumps({
+            "today": today,
+            "week": week,
+            "month": month,
+            "all": all_notes
+        })
     
 if __name__ == "__main__":
     app.run()

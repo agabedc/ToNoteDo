@@ -1,0 +1,104 @@
+$def with ()
+$var css: /static/style.css
+$var js: /static/main.js
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notes Stats</title>
+
+  $if self.css:
+    $for style in self.css.split():
+      <link rel="stylesheet" href="$style" />
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <style>
+    .stats-grid {
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      border-left: none;
+      border-right: none;
+    }
+    .stats-item {
+      flex: 1;
+      padding: 1rem 0;
+      border-left: 1px solid #dee2e6;
+    }
+    .stats-item:first-child {
+      border-left: none;
+    }
+    .stats-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0d6efd;
+      margin-bottom: 0.25rem;
+    }
+    .stats-label {
+      font-size: 1rem;
+      color: #495057;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="form-wrapper">
+    <div class="form-card">
+      <h1 class="form-title">Notes Summary</h1>
+
+      <div class="stats-grid">
+        <div class="stats-item">
+          <div class="stats-number">{{ stats.today }}</div>
+          <div class="stats-label">Today</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-number">{{ stats.week }}</div>
+          <div class="stats-label">This Week</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-number">{{ stats.month }}</div>
+          <div class="stats-label">This Month</div>
+        </div>
+        <div class="stats-item">
+          <div class="stats-number">{{ stats.all }}</div>
+          <div class="stats-label">All Time</div>
+        </div>
+      </div>
+
+      <a href="/" class="text-muted back-link">&larr; Back to Notes</a>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          stats: {
+            today: 0,
+            week: 0,
+            month: 0,
+            all: 0
+          }
+        }
+      },
+      mounted() {
+        // Fetch stats from backend API (example endpoint)
+        fetch('/api/stats')
+          .then(res => res.json())
+          .then(data => {
+            this.stats.today = data.today;
+            this.stats.week = data.week;
+            this.stats.month = data.month;
+            this.stats.all = data.all;
+          })
+          .catch(err => console.error(err));
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
