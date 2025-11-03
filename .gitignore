@@ -2,3 +2,5 @@
 /Note/myenv
 .env
 __pycache__
+/ToDo/backend/venv
+/ToDo/backend/__pycache__
