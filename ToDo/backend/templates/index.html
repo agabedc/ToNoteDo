@@ -10,6 +10,7 @@ $code:
   <title>Todo List</title>
   <link rel="stylesheet" href="/static/style.css">
   <style>
+    /* Basic layout (keep or merge with your CSS) */
     body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:20px; display:flex; justify-content:center; align-items:flex-start; }
     .container { background:#fff; border-radius:10px; padding:20px 30px; box-shadow:0 2px 8px rgba(0,0,0,0.1); width:500px; }
     h1 { text-align:center; color:#333; }
@@ -18,13 +19,29 @@ $code:
     button { border:none; padding:8px 12px; border-radius:5px; cursor:pointer; }
     .btn-success { background:#4CAF50; color:#fff; }
     .btn-primary { background:#007BFF; color:#fff; }
+    .btn-edit { background:#6C5CE7; color:#fff; }
     .btn-danger  { background:#E74C3C; color:#fff; }
     ul.task-list { list-style:none; padding:0; margin:0; }
     li { display:flex; justify-content:space-between; align-items:center; background:#f9f9f9; border-radius:6px; padding:10px; margin-bottom:10px; border-left:5px solid #007BFF; }
-    .task-title { flex:1; color:#333; font-weight:500; }
+    .task-title { flex:1; color:#333; font-weight:500;}
     .completed { text-decoration:line-through; color:#888; }
     small { display:block; color:#777; font-size:12px; margin-top:3px; }
-    .actions { display:flex; gap:5px; }
+    .actions { display:flex; gap:5px; justify-content: center ; align-items:center;}
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.5);
+      display: none; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .modal {
+      background:#fff; width: 95%; max-width: 420px; border-radius:10px;
+      box-shadow:0 10px 30px rgba(0,0,0,.2); padding:18px;
+    }
+    .modal header { font-weight:600; font-size:18px; margin-bottom:10px; }
+    .modal form { display:flex; gap:8px; margin:0; }
+    .modal input[type="text"] { flex:1; padding:10px; font-size:14px; }
+    .modal .footer { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+    .btn-ghost { background:#f1f1f1; color:#333; }
   </style>
 </head>
 <body>
@@ -41,7 +58,7 @@ $code:
         $for task in tasks:
           $code:
               cls = 'task-title completed' if task.completed else 'task-title'
-          <li data-id="$task.id">
+          <li data-id="$task.id" data-title="$task.title">
             <div>
               <span class="$:cls">$task.title</span>
               <small>Created: $:fmt(task.created_at)</small>
@@ -50,10 +67,11 @@ $code:
               <form action="/toggle/$task.id" method="POST" style="display:inline;">
                 <button type="submit" class="btn-primary">$:('Undo' if task.completed else 'Done')</button>
               </form>
-              <form action="/edit/$task.id" method="POST" style="display:inline;">
-                <input type="text" name="title" value="$task.title" style="padding:6px; font-size:14px; margin-right:6px;">
-                <button type="submit" class="btn-primary">Edit</button>
+
+              <form>
+                <button type="button" class="btn-edit edit-btn">Edit</button>
               </form>
+
               <form action="/delete/$task.id" method="POST" style="display:inline;">
                 <button type="submit" class="btn-danger">Delete</button>
               </form>
@@ -63,5 +81,71 @@ $code:
         <li>No tasks yet.</li>
     </ul>
   </div>
+
+  <!-- Reusable Edit Modal (one per page) -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <header id="editModalTitle">Edit Task</header>
+      <form id="editForm" action="" method="POST">
+        <input type="text" id="editInput" name="title" value="" required>
+        <button type="submit" class="btn-edit">Confirm</button>
+      </form>
+      <div class="footer">
+        <button type="button" class="btn-ghost" id="cancelEdit">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const modal = document.getElementById('editModal');
+      const editInput = document.getElementById('editInput');
+      const editForm  = document.getElementById('editForm');
+      const cancelBtn = document.getElementById('cancelEdit');
+
+      // Open modal helper
+      function openModal(taskId, taskTitle) {
+        // Point form to /edit/<id>
+        editForm.action = '/edit/' + taskId;
+        // Prefill current title
+        editInput.value = taskTitle || '';
+        // Show modal
+        modal.style.display = 'flex';
+        // Focus input
+        setTimeout(() => editInput.focus(), 0);
+      }
+
+      // Close modal helper
+      function closeModal() {
+        modal.style.display = 'none';
+      }
+
+      // Wire up all Edit buttons
+      document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          // Find the parent <li> to read data attributes
+          const li = this.closest('li');
+          const id = li.getAttribute('data-id');
+          // Use data-title if present; fall back to visible text
+          const title = li.getAttribute('data-title') || li.querySelector('.task-title')?.textContent || '';
+          openModal(id, title.trim());
+        });
+      });
+
+      // Cancel button
+      cancelBtn.addEventListener('click', closeModal);
+
+      // Click outside modal to close
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+      });
+
+      // Optional: ESC to close
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
+  
