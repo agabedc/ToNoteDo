@@ -18,8 +18,12 @@ $var js: /static/main.js
     </head>
     <body>
         <div class="container">
-            <h1>Notes</h1>
-            <!-- Notes List Card -->
+            <h1 style="display: flex; align-items: center; justify-content: space-between;">
+                Notes
+                <a href="/stats" class="btn btn-primary" style="font-size: 0.9rem; padding: 0.35rem 0.75rem;">
+                    Stats
+                </a>
+            </h1>
             <div class="note-list">
                 $if notes:
                     $for note in notes:
