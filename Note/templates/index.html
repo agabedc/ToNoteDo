@@ -1,4 +1,4 @@
-$def with (notes)
+$def with (notes, message)
 $var css: /static/style.css
 $var js: /static/main.js
 
@@ -24,6 +24,13 @@ $var js: /static/main.js
                     Stats
                 </a>
             </h1>
+            $if message:
+                <div class="alert alert-danger custom-alert" id="alert-box">
+                    <span>Note doesn't exist</span>
+                    <button class="close-btn" onclick="this.parentElement.remove()">×</button>
+                </div>
+
+
             <div class="note-list">
                 $if notes:
                     $for note in notes:

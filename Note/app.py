@@ -8,6 +8,7 @@ load_dotenv()
 urls = (
     '/', 'index',
     '/add', 'add',
+    '/edit', 'edit',
     '/edit/(\d+)', 'edit',
     '/delete/(\d+)', 'delete',
     '/stats', 'stats_page',
@@ -36,8 +37,9 @@ def validate_note(data):
 
 class index:
     def GET(self):
-        notes = db.select('notes')
-        return render.index(notes)
+        notes = db.select('notes', order='created DESC')
+        data = web.input(message='')
+        return render.index(notes, message=data.message)
 
 class add:
     def GET(self):
@@ -58,11 +60,11 @@ class edit:
             return render.edit(note[0], errors={}) 
         raise web.seeother('/?message=Note%20not%20found')
 
-    def POST(self, id):
-        note_query = db.select('notes', where='id=$id', vars={'id': id})
+    def POST(self):
+        data = web.input(identifier=0, title='', body='')
+        note_query = db.select('notes', where='id=$id', vars={'id': data.identifier})
         if not note_query:
             raise web.seeother('/?message=Note%20not%20found')
-        data = web.input(title='', body='')
         errors = validate_note(data)
         if errors:
             note = note_query[0]
@@ -71,9 +73,10 @@ class edit:
             return render.edit(note=note, errors=errors)
         db.update('notes',
                   where='id=$id',
-                  vars={'id': id},
+                  vars={'id': data.identifier},
                   title=data.title,
                   body=data.body)
+        
         raise web.seeother('/')
 
 class delete:

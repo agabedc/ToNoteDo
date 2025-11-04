@@ -19,7 +19,8 @@ $var js: /static/main.js
         <div class="form-wrapper">
             <div class="form-card">
                 <h1 class="form-title">Edit Note</h1>
-                <form method="post" action="/add" autocomplete="off">
+                <form method="post" action="/edit" autocomplete="off">
+                    <input for="identifier" id="identifier" name="identifier" value="$note.id" style="display:none;" />
                     <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input
